@@ -1,6 +1,7 @@
 ﻿using RSCG_CompositeProvider_Common;
 
-namespace CP_Console;
+namespace CP_Test;
+
 [CompositeProvider]
 public interface IDataValue
 {

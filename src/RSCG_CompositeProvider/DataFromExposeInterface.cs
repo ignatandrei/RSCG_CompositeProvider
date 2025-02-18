@@ -66,7 +66,8 @@ internal class DataFromExposeInterface
     }
     private bool IsAwaitable(IMethodSymbol methodSymbol)
     {
-
+        if(IsAsyncEnumerable(methodSymbol)) return true;
+        
         var returnType = methodSymbol.ReturnType;
         if (returnType.Name == nameof(Task) ||
                (returnType.OriginalDefinition != null && returnType.OriginalDefinition.Name == nameof(Task)))
@@ -80,6 +81,16 @@ internal class DataFromExposeInterface
 
         return false;
 
+    }
+    public bool IsAsyncEnumerable(IMethodSymbol methodSymbol)
+    {
+        var returnType = methodSymbol.ReturnType;
+        if (returnType.Name.Contains("IAsyncEnumerable") ||
+               (returnType.OriginalDefinition != null && returnType.OriginalDefinition.Name.Contains("IAsyncEnumerable"))
+           )
+                return true;
+
+        return false;
     }
     public string AsyncMethod(IMethodSymbol methodSymbol)
     {

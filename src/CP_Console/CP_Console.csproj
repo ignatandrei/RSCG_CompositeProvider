@@ -1,15 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-  </PropertyGroup>
+	  <IsPackable>false</IsPackable>
+  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+</PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RSCG_CompositeProvider\RSCG_CompositeProvider.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"  />
+    <ProjectReference Include="..\RSCG_CompositeProvider\RSCG_CompositeProvider.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\RSCG_CompositeProvider_Common\RSCG_CompositeProvider_Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RSCG_TimeBombComment" Version="2023.12.19.1802" />
   </ItemGroup>
 
 	<PropertyGroup>

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSCG_CompositeProvider", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSCG_CompositeProvider_Common", "RSCG_CompositeProvider_Common\RSCG_CompositeProvider_Common.csproj", "{8ABE8ACF-22D2-47DB-8A97-AB793304C848}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP_Test", "CP_Test\CP_Test.csproj", "{FF039B81-CC79-464B-A47F-1FB0CFC2111E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{8ABE8ACF-22D2-47DB-8A97-AB793304C848}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8ABE8ACF-22D2-47DB-8A97-AB793304C848}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8ABE8ACF-22D2-47DB-8A97-AB793304C848}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF039B81-CC79-464B-A47F-1FB0CFC2111E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF039B81-CC79-464B-A47F-1FB0CFC2111E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF039B81-CC79-464B-A47F-1FB0CFC2111E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF039B81-CC79-464B-A47F-1FB0CFC2111E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

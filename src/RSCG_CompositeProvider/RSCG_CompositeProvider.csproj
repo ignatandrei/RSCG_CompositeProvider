@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
@@ -8,7 +8,8 @@
 		<IsRoslynComponent>true</IsRoslynComponent>
 		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 		<!--<IncludeBuildOutput>false</IncludeBuildOutput>-->
-	</PropertyGroup>
+	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+</PropertyGroup>
 	<PropertyGroup>
 
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
@@ -20,6 +21,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="RSCG_TimeBombComment" Version="2023.12.19.1802" />
 
 		<PackageReference Include="System.CodeDom" PrivateAssets="all" GeneratePathProperty="true" Version="8.0.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
@@ -60,7 +62,7 @@
 		<NoWarn>NU5125;NU5039;CS0436</NoWarn>
 		<!--<Version>8.$([System.DateTime]::Now.ToString(yyyy.1MMdd.1HHss))</Version>-->
 		<!--<Version>$([System.DateTime]::Now.ToString(8.yyyy.1MMdd.1HHmm))</Version>-->
-		<Version>2025.209.1000</Version>
+		<Version>2025.218.2000</Version>
 
 		<!--<Optimize Condition="'$(Configuration)'=='Release'">true</Optimize>-->
 		<RepositoryUrl>https://github.com/ignatandrei/RSCG_CompositeProvider</RepositoryUrl>
