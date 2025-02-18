@@ -4,12 +4,8 @@ namespace CP_Console;
 [CompositeProvider]
 public interface IDataValue
 {
-    public string Connection { get; set; }
-    public bool IsValid();
+    public string Name { get; set; }
+    public Task<string> KeyFromValue(string key, bool defaultValue);
 
-    public string KeyFromValue(string key, bool defaultValue);
-
-    public Task<long> getNumberPersons();
-
-    public IAsyncEnumerable<string> getPersons(long idDepartment);
+    
 }

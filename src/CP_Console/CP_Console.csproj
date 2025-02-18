@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -14,10 +14,14 @@
     <ProjectReference Include="..\RSCG_CompositeProvider_Common\RSCG_CompositeProvider_Common.csproj" />
   </ItemGroup>
 
+  <!--<ItemGroup>
+    <PackageReference Include="RSCG_CompositeProvider" Version="2025.218.2100" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="RSCG_CompositeProvider_Common" Version="2025.218.2100" />
+  </ItemGroup>-->
   <ItemGroup>
-    <PackageReference Include="RSCG_TimeBombComment" Version="2023.12.19.1802" />
-  </ItemGroup>
+	  <PackageReference Include="RSCG_TimeBombComment" Version="2023.12.19.1802" />
 
+  </ItemGroup>
 	<PropertyGroup>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\GX</CompilerGeneratedFilesOutputPath>

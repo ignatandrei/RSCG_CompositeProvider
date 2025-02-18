@@ -1,116 +1,69 @@
+# RSCG_CompositeProvider
 
-# Interface to Null Object Pattern
-Implementation of https://en.wikipedia.org/wiki/Null_object_pattern  from interface
 
-# Installation
+Composite provider from interface . Given multiple implementation of an interface , return data from each / one 
 
-Add to your csproj file:
 
+## Usage
+
+Add the nuget package to your project
+```
+dotnet add package RSCG_CompositeProvider
+dotnet add package RSCG_CompositeProviderCommon
+
+```
+
+or put in your csproj file
 ```xml
   <ItemGroup>
-    <PackageReference Include="rscg_Interface_to_null_object" Version="2025.218.2000"  OutputItemType="Analyzer" ReferenceOutputAssembly="false"  />
-    <PackageReference Include="rscg_Interface_to_null_object_common" Version="2025.218.2000" />
+    <PackageReference Include="RSCG_CompositeProvider" Version="2025.218.2100" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="RSCG_CompositeProvider_Common" Version="2025.218.2100" />
   </ItemGroup>
-	<PropertyGroup>
-		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\GX</CompilerGeneratedFilesOutputPath>
-	</PropertyGroup>
 ```
 
-Or add the nuget packages rscg_Interface_to_null_object  and rscg_Interface_to_null_object_common
-
-# Usage
-
-## Simple usage
+Then if you have an interface like this
 ```csharp
-[InterfaceToNullObject.ToNullObject]
-public interface IEmployee
+public interface IDataFrom
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public IDepartment Department { get; set; }
-    public string GetFullName();
-  
+    string Name { get; }
+    Task<string> KeyFromValue(string value, bool isKey);
+}
+```
+and multiple implementation of the interface like this
+```csharp
+class DataFromHttp : IDataValue
+{
+    public string Name { get { return "DataFromHttp"; } set { } }
+
+    public async Task<string> KeyFromValue(string key, bool defaultValue)
+    {
+        var http=new HttpClient();
+        var result = await http.GetStringAsync("https://www."+ Guid.NewGuid().ToString()+".com/" + key);
+        return result;
+    }
+}
+
+
+class DataFromMemory : IDataValue
+{
+    public string Name { get { return "DataFromMemory"; } set { } }
+
+    public async Task<string> KeyFromValue(string key, bool defaultValue)
+    {
+        await Task.Delay(1000);
+        return $"this is value for {key} from memory";
+    }
 }
 ```
 
-And then a C# class that implements the interface will be generated
+then you can call the composite provider to get data from all the implementation of the interface like this
 
 ```csharp
-public partial class Employee_null : global::IntegrationConsole.IEmployee
-{
 
-        public virtual string FirstName { get; set; } = default(string);
-    
-        public virtual string LastName { get; set; } = default(string);
-    
-        public virtual IntegrationConsole.IDepartment Department { get; set; } = default(IntegrationConsole.IDepartment);
-    
-        public virtual string GetFullName() { return default(string); }
-    
-}
-
+IDataValue provider = new DataValue_CP(new DataFromHttp(), new DataFromMemory());
+var result = await provider.KeyFromValue("test", false);
+Console.WriteLine(result);
+DataValue_CP realClass = (DataValue_CP)provider ;
+var lastInterface = realClass.lastUsedInterface ?? -1;
+Console.WriteLine("value was obtained from " + realClass.Get(lastInterface).Name);
 ```
-## Deserialize to interface
-
-See following code that deserializes to interface with a converter that is automatically generated
-
-```csharp
-//serialize and deserialize
-var empString = JsonSerializer.Serialize(employee);
-Console.WriteLine(empString);
-//deserialize
-
-var options = new JsonSerializerOptions
-{
-    PropertyNameCaseInsensitive = true,
-    DefaultBufferSize = 128
-};
-options.Converters.Add(new IDepartmentConverter());
-options.Converters.Add(new IEmployeeConverter());
-
-var emp2 = JsonSerializer.Deserialize<IEmployee>(empString,options);
-ArgumentNullException.ThrowIfNull(emp2);
-Console.WriteLine(emp2.FirstName);
-Console.WriteLine(emp2.Department.Name);
-Debug.Assert(emp2.FirstName == "Andrei");
-```
-
-
-## Adding default values
-
-Let's say you want to return an empty string for the GetFullName method, you can add the following code to your csproj file
-
-```xml
-<ItemGroup>
-  <CompilerVisibleProperty Include="I2NO_String" />
-</ItemGroup>
-<PropertyGroup>
-  <I2NO_String>return ""</I2NO_String>	
-</PropertyGroup>
-```
-
-So now the code will be generated like this
-
-```csharp
-public virtual string GetFullName() {  return "" ; }
-```
-
-For array and generics, see 
-```xml
-<ItemGroup>
-	<CompilerVisibleProperty Include="I2NO_String" />
-	<CompilerVisibleProperty Include="I2NO_IntegrationConsole_IEmployee_Array" />
-	<CompilerVisibleProperty Include="I2NO_System_Collections_Generic_IAsyncEnumerable_Of_IntegrationConsole_IEmployee_EndOf" />
-</ItemGroup>
-<ItemGroup>
-  <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-</ItemGroup>
-<PropertyGroup>
-	<I2NO_String>return ""</I2NO_String>
-	<I2NO_IntegrationConsole_IEmployee_Array>return []</I2NO_IntegrationConsole_IEmployee_Array>
-	<I2NO_System_Collections_Generic_IAsyncEnumerable_Of_IntegrationConsole_IEmployee_EndOf>return AsyncEnumerable.Empty_Of_IntegrationConsole.IEmployee_EndOf();</I2NO_System_Collections_Generic_IAsyncEnumerable_Of_IntegrationConsole_IEmployee_EndOf>
-</PropertyGroup>
-
-```
-
