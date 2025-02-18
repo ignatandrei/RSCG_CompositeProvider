@@ -8,4 +8,6 @@ public interface IDataValue
     public bool IsValid();
 
     public string KeyFromValue(string key, bool defaultValue);
+
+    public Task<long> getNumberPersons();
 }

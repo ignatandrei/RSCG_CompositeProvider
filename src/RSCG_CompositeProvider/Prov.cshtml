@@ -31,7 +31,33 @@ public partial class @(nameClass) : @Model.FullName
     @foreach (var prop in Model.props)
     {
         <text>
-            public @prop.Type @prop.Name { get; set; } = default(@prop.Type);
+            public @prop.Type @prop.Name { get
+                {
+        foreach(var item in values){
+            if(item == null)continue;
+                try{
+                    return item.@prop.Name;
+                }
+                catch(Exception ){
+                //try with the next one
+                }
+        }
+        throw new System.Collections.Generic.KeyNotFoundException();
+                }
+                set
+    {
+        foreach(var item in values){
+        if(item == null)continue;
+        try{
+            item.@prop.Name = value;
+        }
+        catch(Exception ){
+        //try with the next one
+        }
+        }
+        }
+   
+    } 
         </text>
     }
 @foreach (var func in Model.functions)
@@ -39,11 +65,12 @@ public partial class @(nameClass) : @Model.FullName
     string ret = Model.DefaultValueReturnFunc(func);
     
     <text>
-        public virtual @func.ReturnType @Model.DisplayFunc(func) {  
+        public virtual @Model.AsyncMethod(func) @func.ReturnType @Model.DisplayFunc(func) {  
             foreach(var item in values){
                 if(item == null)continue;
                 try{
-                    return item.@(Model.CallFunc(func)) ;
+                    var data=  @Model.AwaitMethod(func) item.@(Model.CallFunc(func)) ;
+                    return data;
                 }
                 catch(Exception ){
                     //try with the next one

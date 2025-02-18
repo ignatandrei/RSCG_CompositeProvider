@@ -27,6 +27,7 @@ internal class DataFromExposeInterface
     //private INamedTypeSymbol type;
     public string CallFunc(IMethodSymbol methodSymbol)
     {
+        
         var sdf = new SymbolDisplayFormat(
                 globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Included,
                 genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
@@ -62,6 +63,31 @@ internal class DataFromExposeInterface
 
 
         return str;
+    }
+    private bool IsAwaitable(IMethodSymbol methodSymbol)
+    {
+
+        var returnType = methodSymbol.ReturnType;
+        if (returnType.Name == nameof(Task) ||
+               (returnType.OriginalDefinition != null && returnType.OriginalDefinition.Name == nameof(Task)))
+            return true;
+
+        if (returnType.Name == nameof(ValueTask) ||
+               (returnType.OriginalDefinition != null && returnType.OriginalDefinition.Name == nameof(ValueTask)))
+            return true;
+        if (returnType.AllInterfaces.Any(i => i.Name == nameof(IAsyncResult)))
+            return true;
+
+        return false;
+
+    }
+    public string AsyncMethod(IMethodSymbol methodSymbol)
+    {
+        return IsAwaitable( methodSymbol)? " async " : "";
+    }
+    public string AwaitMethod(IMethodSymbol methodSymbol)
+    {
+        return IsAwaitable(methodSymbol)? " await " : "";
     }
     public string DisplayFunc(IMethodSymbol methodSymbol)
     {
