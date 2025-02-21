@@ -16,8 +16,8 @@ dotnet add package RSCG_CompositeProviderCommon
 or put in your csproj file
 ```xml
   <ItemGroup>
-    <PackageReference Include="RSCG_CompositeProvider" Version="2025.218.2100" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <PackageReference Include="RSCG_CompositeProvider_Common" Version="2025.218.2100" />
+    <PackageReference Include="RSCG_CompositeProvider" Version="2025.221.439" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="RSCG_CompositeProvider_Common" Version="2025.221.439" />
   </ItemGroup>
 ```
 
