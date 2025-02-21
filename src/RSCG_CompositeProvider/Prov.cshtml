@@ -12,8 +12,8 @@
     //</auto-generated>
 //------------------------------------------------------------------------------
 /// <summary>
-    /// This static partial class is a composite provider of @Model.Name objects. 
-    ///</summary>
+/// This static partial class is a composite provider of @Model.Name objects. 
+///</summary>
 
 #nullable enable
 #pragma warning disable CS8603
@@ -23,8 +23,8 @@
 @Model.DebuggerDisplay()
 public partial class @(nameClass) : @Model.FullName
 {
-public int? lastUsedInterface ;
-
+public int? lastUsedInterface = null;
+public bool UseFirstTheLastOneThatWorks = false;
 private @(Model.FullName + "[]") values;
 public @(nameClass)(params @(Model.FullName+"[]") values){
 this.values=values;
@@ -45,30 +45,41 @@ public @Model.FullName Get(int nr){
     <text>
         public @prop.Type @prop.Name { get
         {
-        lastUsedInterface = null;
-        foreach(var item in values){
-        lastUsedInterface =(lastUsedInterface ??-1)+1;
-        if(item == null)continue;
-        try{
-        return item.@prop.Name;
-        }
-        catch(Exception ){
-        //try with the next one
-        }
-        }
-        throw new System.Collections.Generic.KeyNotFoundException();
+            if(UseFirstTheLastOneThatWorks && (lastUsedInterface != null))
+            {
+                var item = values[lastUsedInterface.Value];
+                if(item != null)
+                try{
+                    return item.@prop.Name;
+                }
+                catch(Exception ){
+                //try with all next
+                }
+            }
+            lastUsedInterface = null;
+            foreach(var item in values){
+                lastUsedInterface =(lastUsedInterface ??-1)+1;
+                if(item == null)continue;
+                try{
+                    return item.@prop.Name;
+                }
+                catch(Exception ){
+                //try with the next one
+                }
+            }
+            throw new System.Collections.Generic.KeyNotFoundException();
         }
         set
         {
-        foreach(var item in values){
-        if(item == null)continue;
-        try{
-        item.@prop.Name = value;
-        }
-        catch(Exception ){
-        //try with the next one
-        }
-        }
+            foreach(var item in values){
+                if(item == null)continue;
+                try{
+                item.@prop.Name = value;
+                }
+                catch(Exception ){
+                //try with the next one
+                }
+            }
         }
 
         } 
@@ -82,9 +93,53 @@ public @Model.FullName Get(int nr){
     {
         <text>
             public virtual @Model.AsyncMethod(func) @func.ReturnType @Model.DisplayFunc(func) {
+
+            if(UseFirstTheLastOneThatWorks && (lastUsedInterface != null))
+            {
+                var item = values[lastUsedInterface.Value];
+                if(item != null){
+
+                    bool calledSuccess = false;
+                    @func.ReturnType? enumerable = null;
+                    try{
+                        enumerable=  item.@(Model.CallFunc(func)) ;
+                    }
+                    catch(Exception){};
+                    if( enumerable!=null){
+                        await using var enumerator = enumerable.GetAsyncEnumerator();
+                        for (var more = true; more;)
+                        {
+                        // Catch exceptions only on executing/resuming the iterator function
+                            try
+                            {
+                            more = await enumerator.MoveNextAsync();
+                            calledSuccess=true;
+                            }
+                            catch (Exception)
+                            {
+                                //already give some data,so no try with next
+                                if(calledSuccess)
+                                throw;
+                                //no data yet, try next one
+                                more=false;
+                                }
+                            if(more){
+                                yield return enumerator.Current;
+                            }
+
+
+                        }
+                    }
+                    if(calledSuccess) yield break;
+                }                
+            }
+
             lastUsedInterface =null;
+
+
+
             foreach(var item in values){
-            lastUsedInterface =(lastUsedInterface ??-1)+1;
+                lastUsedInterface =(lastUsedInterface ??-1)+1;
                 if(item == null)continue;
             
                 bool calledSuccess = false;
@@ -127,7 +182,20 @@ public @Model.FullName Get(int nr){
     else{
         <text>
             public virtual @Model.AsyncMethod(func) @func.ReturnType @Model.DisplayFunc(func) {
+                if(UseFirstTheLastOneThatWorks && (lastUsedInterface != null))
+                {
+                    var item = values[lastUsedInterface.Value];
+                    if(item != null)
+                    try{
+                        var data=  @Model.AwaitMethod(func) item.@(Model.CallFunc(func)) ;
+                        return data;
+                    }
+                    catch(Exception ){
+                    //try with the next one
+                    }
+                }
                 lastUsedInterface =null;
+
                 foreach(var item in values){
                     lastUsedInterface =(lastUsedInterface ??-1)+1;
                     if(item == null)continue;
@@ -139,7 +207,7 @@ public @Model.FullName Get(int nr){
                         //try with the next one
                     }
                 }
-                throw new System.Collections.Generic.KeyNotFoundException();
+            throw new System.Collections.Generic.KeyNotFoundException();
             }
         </text>
     }
